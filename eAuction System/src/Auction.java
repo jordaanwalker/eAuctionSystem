@@ -13,6 +13,27 @@ public class Auction {
 		this.status = status;
 	}
 
+	
+	public void placeBid() {
+		
+	}
+	
+	public void verify() {
+		
+	}
+	
+	public void close() {
+		
+	}
+	
+	public boolean isBlocked() {
+		return false;
+	}
+	
+	public void setBlocked() {
+		
+	}
+	
 	public double getStartPrice() {
 		return startPrice;
 	}
