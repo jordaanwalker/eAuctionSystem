@@ -6,10 +6,44 @@ public class Auction {
 	private Date closeDate;
 	private char status;
 	
-	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-	
-
+	public Auction(Double startPrice,Double reservePrice, Date closeDate, char status) {
+		this.startPrice = startPrice;
+		this.reservePrice = reservePrice;
+		this.closeDate = closeDate;
+		this.status = status;
 	}
+
+	public double getStartPrice() {
+		return startPrice;
+	}
+
+	public void setStartPrice(double startPrice) {
+		this.startPrice = startPrice;
+	}
+
+	public double getReservePrice() {
+		return reservePrice;
+	}
+
+	public void setReservePrice(double reservePrice) {
+		this.reservePrice = reservePrice;
+	}
+
+	public Date getCloseDate() {
+		return closeDate;
+	}
+
+	public void setCloseDate(Date closeDate) {
+		this.closeDate = closeDate;
+	}
+
+	public char getStatus() {
+		return status;
+	}
+
+	public void setStatus(char status) {
+		this.status = status;
+	}
+	
+	
 }
