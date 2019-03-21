@@ -1,6 +1,6 @@
 import java.util.Date;
 
-//test branch
+
 
 public class Bid {
 	private double amount;
