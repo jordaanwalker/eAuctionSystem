@@ -1,3 +1,4 @@
+package ljmu.auction;
 
 public class Item {
 	private String description;

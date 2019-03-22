@@ -1,4 +1,4 @@
-
+package ljmu.auction;
 public class Seller extends User {
 
 	

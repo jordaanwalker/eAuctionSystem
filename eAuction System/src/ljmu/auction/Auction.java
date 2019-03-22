@@ -1,3 +1,4 @@
+package ljmu.auction;
 import java.util.Date;
 
 public class Auction {

@@ -1,3 +1,4 @@
+package ljmu.auction;
 
 public class User {
 	protected String username;
