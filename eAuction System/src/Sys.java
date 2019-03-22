@@ -13,11 +13,12 @@ public class Sys {
 	private List<Auction> auction = Collections.synchronizedList(new LinkedList<Auction>());
 	private List<User> user = Collections.synchronizedList(new LinkedList<User>());
 
-	private Seller seller;
-	private Buyer buyer;
+	private static Seller seller;
+	private static Buyer buyer;
 
 	public void System() {
 		user.add(new Seller("Jordan", "123"));
+		user.add(new Buyer("Ellen", "123"));
 		// same for more sellers/buyers
 
 		auction.add(new Auction(1.50, 2.50, LocalDateTime.now().minusSeconds(40), 'A', new Item("Ball")));
@@ -72,15 +73,42 @@ public class Sys {
 		System.out.println("-- GOODBYE --");
 
 	}
-	
+
 	private static void logIn() {
 		System.out.print("Please Enter Username : ");
-		String userName = S.next();
+		String username = S.next();
 
 		System.out.print("Please Enter Password : ");
 		String password = S.next();
 
-		// User user = getUsername(userName);
+		User user = getUsername(username);
+		
+		if(user != null) {
+			if(user.checkPassword(password)) {
+				if(Seller.class.isInstance(user)) {
+					seller = Seller.class.cast(user);
+					if(!Seller.isBlocked()) {
+						sellerMenu();
+					}
+				}
+			}
+		} else {
+			buyer = Buyer.class.cast(user);
+			buyerMenu();
+		} 
+	}
+
+	private static User getUsername(String username) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static void sellerMenu() {
+		System.out.print("welcome1");
+	}
+	
+	public static void buyerMenu() {
+		System.out.print("welcome2");
 	}
 	
 	public void placeAuction() {

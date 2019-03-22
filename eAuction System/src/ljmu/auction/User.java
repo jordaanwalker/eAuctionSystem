@@ -25,8 +25,8 @@ public class User {
 		this.password = password;
 	}
 
-	public void checkPassword() {
-		
+	public boolean checkPassword(String password) {
+		return  false;
 	}
 	
 	public static void main(String[] args) {

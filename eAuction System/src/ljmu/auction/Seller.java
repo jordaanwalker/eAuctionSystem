@@ -8,7 +8,7 @@ public class Seller extends User {
 		super(username, password);
 	}
 
-	public boolean isBlocked() {
+	public static boolean isBlocked() {
 		return false;
 	}
 	
