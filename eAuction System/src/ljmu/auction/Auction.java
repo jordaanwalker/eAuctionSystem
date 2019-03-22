@@ -1,17 +1,20 @@
 package ljmu.auction;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class Auction {
 	private double startPrice;
 	private double reservePrice;
-	private Date closeDate;
+	private LocalDateTime closeDate;
 	private char status;
+	private Item item;
 	
-	public Auction(Double startPrice,Double reservePrice, Date closeDate, char status) {
+	public Auction(Double startPrice,Double reservePrice, LocalDateTime closeDate, char status, Item item) {
 		this.startPrice = startPrice;
 		this.reservePrice = reservePrice;
 		this.closeDate = closeDate;
 		this.status = status;
+		this.item = item;
+		
 	}
 
 	
@@ -51,11 +54,11 @@ public class Auction {
 		this.reservePrice = reservePrice;
 	}
 
-	public Date getCloseDate() {
+	public LocalDateTime getCloseDate() {
 		return closeDate;
 	}
 
-	public void setCloseDate(Date closeDate) {
+	public void setCloseDate(LocalDateTime closeDate) {
 		this.closeDate = closeDate;
 	}
 
