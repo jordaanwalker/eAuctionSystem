@@ -11,7 +11,7 @@ public class Sys {
 	private static final Scanner S = new Scanner(System.in);
 
 	private List<Auction> auction = Collections.synchronizedList(new LinkedList<Auction>());
-	private List<User> user = Collections.synchronizedList(new LinkedList<User>());
+	private static List<User> user = Collections.synchronizedList(new LinkedList<User>());
 
 	private static Seller seller;
 	private static Buyer buyer;
@@ -87,6 +87,7 @@ public class Sys {
 			if(user.checkPassword(password)) {
 				if(Seller.class.isInstance(user)) {
 					seller = Seller.class.cast(user);
+					
 					if(!Seller.isBlocked()) {
 						sellerMenu();
 					}
@@ -96,10 +97,17 @@ public class Sys {
 			buyer = Buyer.class.cast(user);
 			buyerMenu();
 		} 
+		System.out.print("No Entry");
 	}
 
 	private static User getUsername(String username) {
-		// TODO Auto-generated method stub
+
+	//user.stream().filter(o -> o.getUsername().equals(username));
+	for (User user : user) {
+		if(user.getUsername().equals(username)){
+			return user;
+		}
+	}
 		return null;
 	}
 

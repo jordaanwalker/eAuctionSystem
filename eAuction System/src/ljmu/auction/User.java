@@ -26,7 +26,7 @@ public class User {
 	}
 
 	public boolean checkPassword(String password) {
-		return  false;
+		return true;
 	}
 	
 	public static void main(String[] args) {
