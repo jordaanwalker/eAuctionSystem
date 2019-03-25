@@ -49,12 +49,12 @@ public class Sys {
 				break;
 			}
 			case "2":
-			case "B" : {
+			case "B": {
 				browseAuction();
 				break;
 			}
 			case "3":
-			case "S" :  {
+			case "S": {
 				setupAccount();
 				break;
 			}
@@ -76,13 +76,13 @@ public class Sys {
 		String password = S.next();
 
 		User user = getUsername(username);
-		
-		if(user != null) {
-			if(user.checkPassword(password)) {
-				if(Seller.class.isInstance(user)) {
+
+		if (user != null) {
+			if (user.checkPassword(password)) {
+				if (Seller.class.isInstance(user)) {
 					seller = Seller.class.cast(user);
-					
-					if(!Seller.isBlocked()) {
+
+					if (!Seller.isBlocked()) {
 						sellerMenu();
 					}
 				}
@@ -90,34 +90,33 @@ public class Sys {
 		} else {
 			buyer = Buyer.class.cast(user);
 			buyerMenu();
-		} 
+		}
 		System.out.print("No Entry");
+		S.close();
 	}
 
 	private static User getUsername(String username) {
-	/*
-	user.stream()
-	.filter(o -> o.getUsername().equals(username)); 
-	if(o.isPresent()) {
-		return o.get();
-	*/
-	
-	for (User user : user) {
-		if(user.getUsername().equals(username)){
-			return user;
+		/*
+		 * user.stream() .filter(o -> o.getUsername().equals(username));
+		 * if(o.isPresent()) { return o.get();
+		 */
+
+		for (User user : user) {
+			if (user.getUsername().equals(username)) {
+				return user;
+			}
 		}
-	}
 		return null;
 	}
 
 	public static void sellerMenu() {
 		System.out.print("welcome1");
 	}
-	
+
 	public static void buyerMenu() {
 		System.out.print("welcome2");
 	}
-	
+
 	public static void browseAuction() {
 		System.out.print("Browse Auction \n");
 	}
@@ -125,6 +124,7 @@ public class Sys {
 	public static void setupAccount() {
 		System.out.print("Create account \n");
 	}
+
 	public void placeAuction() {
 
 	}
