@@ -30,15 +30,14 @@ public class Sys {
 
 		System.out.println();
 
-		String selection = "";
+		String selection;
 
 		do {
 			System.out.println("-- MAIN MENU --");
 			System.out.println("1 - [L]og In");
-			System.out.println("2 - [S]earch & Reserve Room");
-			System.out.println("3 - [C]ancel Room");
-			System.out.println("4 - [T]oDo");
-			System.out.println("5 - [Q]uit");
+			System.out.println("2 - [B]rowse Auctions");
+			System.out.println("3 - [S]etup Account");
+			System.out.println("4 - [Q]uit");
 			System.out.print("Pick : ");
 
 			selection = S.next().toUpperCase();
@@ -50,22 +49,17 @@ public class Sys {
 				break;
 			}
 			case "2":
-			/* case "" : */ {
-				//
+			case "B" : {
+				browseAuction();
 				break;
 			}
 			case "3":
-			/* case "C" : */ {
-				//
-				break;
-			}
-			case "4":
-			/* case "T" : */ {
-
+			case "S" :  {
+				setupAccount();
 				break;
 			}
 			}
-		} while (!selection.equals("Q") & !selection.equals("5"));
+		} while (!selection.equals("Q") & !selection.equals("4"));
 
 		// best practise to close scanners.
 		S.close();
@@ -101,8 +95,13 @@ public class Sys {
 	}
 
 	private static User getUsername(String username) {
-
-	//user.stream().filter(o -> o.getUsername().equals(username));
+	/*
+	user.stream()
+	.filter(o -> o.getUsername().equals(username)); 
+	if(o.isPresent()) {
+		return o.get();
+	*/
+	
 	for (User user : user) {
 		if(user.getUsername().equals(username)){
 			return user;
@@ -119,16 +118,14 @@ public class Sys {
 		System.out.print("welcome2");
 	}
 	
+	public static void browseAuction() {
+		System.out.print("Browse Auction \n");
+	}
+
+	public static void setupAccount() {
+		System.out.print("Create account \n");
+	}
 	public void placeAuction() {
 
 	}
-
-	public void browseAuction() {
-
-	}
-
-	public void setupAccount() {
-
-	}
-
 }

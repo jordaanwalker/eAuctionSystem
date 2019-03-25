@@ -1,10 +1,5 @@
 package ljmu.auction;
 
-public class Status {
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
-
+public enum Status {
+	PENDING, ACTIVE, CLOSED;
 }
