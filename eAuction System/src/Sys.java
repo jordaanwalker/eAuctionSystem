@@ -92,7 +92,6 @@ public class Sys {
 			buyerMenu();
 		}
 		System.out.print("No Entry");
-		S.close();
 	}
 
 	private static User getUsername(String username) {
