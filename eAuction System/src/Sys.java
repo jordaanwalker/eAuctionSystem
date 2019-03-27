@@ -70,10 +70,10 @@ public class Sys {
 
 	private static void logIn() {
 		System.out.print("Please Enter Username : ");
-		String username = S.next();
+		String username = S.next().toUpperCase();
 
 		System.out.print("Please Enter Password : ");
-		String password = S.next();
+		String password = S.next().toUpperCase();
 
 		User user = getUsername(username);
 
@@ -117,14 +117,30 @@ public class Sys {
 	}
 
 	public static void browseAuction() {
-		System.out.print("Browse Auction \n");
+		System.out.print("-- BROWSE AUCTION -- \n");
 	}
 
 	public static void setupAccount() {
-		System.out.print("Create account \n");
-	}
+		
+		System.out.print( "-- SETUP ACCOUNT -- \n");
+		//need a new username - check is already exists
+		//need a password
+		//save to a .txt file
+		System.out.print("Please Enter a Username : ");
+		String newUsername = S.next();
+		
+		System.out.print("Please Enter a Password : ");
+		String newPassword = S.next();
+		
+		//user.add(new User(newUsername, newPassword));
+		System.out.print("Your account has been created - Sign in to view! \n");
+		}
 
 	public void placeAuction() {
 
+	}
+
+	public void run() {
+		main(null);
 	}
 }
