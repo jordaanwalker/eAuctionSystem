@@ -1,7 +1,8 @@
 package ljmu.auction;
 
 public class Item {
-	private String description;
+	
+	private static String description;
 	
 	public Item(String description) {
 		this.description = description;
@@ -12,4 +13,19 @@ public class Item {
 
 	}
 
+	@Override
+	public String toString() {
+		return "Item : " + description;
+	}
+
+	public static String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	
+	
 }

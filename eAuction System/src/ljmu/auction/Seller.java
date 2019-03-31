@@ -9,7 +9,7 @@ public class Seller extends User {
 	}
 
 	public static boolean isBlocked() {
-		return true;
+		return false;
 	}
 	
 	public void setBlocked() {

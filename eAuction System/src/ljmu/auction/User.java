@@ -9,6 +9,11 @@ public class User {
 		this.password = password;
 	}
 	
+	@Override
+	public String toString() {
+		return "User : " + username;
+	}
+
 	public String getUsername() {
 		return username;
 	}
@@ -26,7 +31,11 @@ public class User {
 	}
 
 	public boolean checkPassword(String password) {
-		return true;
+		if(password.equals(password)) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 	public static void main(String[] args) {

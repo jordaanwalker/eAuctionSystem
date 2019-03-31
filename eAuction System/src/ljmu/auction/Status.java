@@ -1,5 +1,5 @@
 package ljmu.auction;
 
 public enum Status {
-	PENDING, ACTIVE, CLOSED;
+	PENDING, ACTIVE, CLOSED, BLOCKED;
 }
