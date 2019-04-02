@@ -1,5 +1,10 @@
 package ljmu.auction;
-
+/**
+ * <i> User class is abstract.
+ * @author Jordan Walker
+ * @see <I>Seller</i>
+ * @see <i>Buyer</i>
+ */
 public class User {
 	protected String username;
 	protected String password;
@@ -29,9 +34,9 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-
+//Java Doc here maybe
 	public boolean checkPassword(String password) {
-		if(password.equals(password)) {
+		if(this.password.equals(password)) {
 			return true;
 		} else {
 			return false;

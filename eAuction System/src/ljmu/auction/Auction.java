@@ -1,25 +1,25 @@
 package ljmu.auction;
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.time.format.DateTimeFormatter;
 
 public class Auction {
 	private double startPrice;
 	private double reservePrice;
-	private String closeDate;
-	private char status;
+	private LocalDateTime closeDate;
+	private	Status status;
 	private Item item;
 	
-	public Auction(Double startPrice,Double reservePrice, String chooseStartDate, Item item) {
+	public Auction(Double startPrice,Double reservePrice, LocalDateTime chooseStartDate, Status status, Item item) {
 		this.startPrice = startPrice;
 		this.reservePrice = reservePrice;
 		this.closeDate = chooseStartDate;
-		//this.status = status;
+		this.status = status;
 		this.item = item;
 		
 	}
 
 	
-	public static void placeBid() {
+	public void placeBid() {
 		
 	}
 	
@@ -27,11 +27,26 @@ public class Auction {
 		
 	}
 	
-	public void close() {
+	public synchronized void close() {
+		status = Status.CLOSED;
 		
+		Bid highest;
+		
+		if((highest = getHighestBid()) != null) {
+			highest.getWho().victory(this);
+		}
 	}
-	
+	// ToDo : Fix This
+	private Bid getHighestBid() {
+		
+		return null;
+	}
+
+
 	public boolean isBlocked() {
+		if(Status.BLOCKED != null) {
+			return true;
+		}
 		return false;
 	}
 	
@@ -41,14 +56,21 @@ public class Auction {
 	
 	@Override
 	public String toString() {
-		return "Auction : [startPrice=" + startPrice + ", reservePrice=" + reservePrice + ", closeDate=" + closeDate
-				+ ", item=" + item + "]";
+		return String.format("Item : %s \nStart Price : £%.2f \nReserve Price : £%.2f \n"+"Close Date : " + closeDate
+				+ " ", item, startPrice, reservePrice);
 	}
-
+//String.format("No:%02d  Type:%s  Price:%.2f  isBalcony:%s  isLounge:%s  isReserve:%s  %s",
 
 	public double getStartPrice() {
 		return startPrice;
 	}
+
+	/*@Override
+	public String toString() {
+		return "Auction [startPrice=" + startPrice + ", reservePrice=" + reservePrice + ", closeDate=" + closeDate
+				+ ", status=" + status + ", item=" + item + "]";
+	}*/
+
 
 	public void setStartPrice(double startPrice) {
 		this.startPrice = startPrice;
@@ -62,20 +84,31 @@ public class Auction {
 		this.reservePrice = reservePrice;
 	}
 
-	public String getCloseDate() {
+	public LocalDateTime getCloseDate() {
 		return closeDate;
 	}
 
-	public void setCloseDate(String closeDate) {
+	public synchronized String getCloseDateFormat() {
+		return closeDate.format(DateTimeFormatter.ofPattern("d MM yy HH:mm"));
+		
+	}
+	
+	public void setCloseDate(LocalDateTime closeDate) {
 		this.closeDate = closeDate;
 	}
 
-	public char getStatus() {
+	public Status getStatus() {
 		return status;
 	}
 
-	public void setStatus(char status) {
+	public void setStatus(Status status) {
 		this.status = status;
+	}
+
+
+	public void activate() {
+		status = Status.ACTIVE;
+		
 	}
 	
 	

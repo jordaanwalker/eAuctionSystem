@@ -5,7 +5,7 @@ public class Buyer extends User{
 		super(username, password);
 	}
 
-	public void victory() {
+	public void victory(Auction auction) {
 		
 	}
 	

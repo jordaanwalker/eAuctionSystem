@@ -1,8 +1,7 @@
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
@@ -13,26 +12,22 @@ public class Sys {
 
 	private static final Scanner S = new Scanner(System.in);
 
-	private static List<Auction> auction = Collections.synchronizedList(new LinkedList<Auction>());
-	private static List<User> user = Collections.synchronizedList(new LinkedList<User>());
-	private static List<Item> itemList = Collections.synchronizedList(new LinkedList<Item>());
-	
-	private static SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-	
-	private static Seller seller;
-	private static Buyer buyer;
+	private List<Auction> auctions = Collections.synchronizedList(new LinkedList<Auction>());
+	private List<User> user = Collections.synchronizedList(new LinkedList<User>());
+	private List<Item> itemList = Collections.synchronizedList(new LinkedList<Item>());
 
-	public static void loadData() {
+	private Seller seller;
+	private Buyer buyer;
+
+	public Sys() {
 		user.add(new Seller("Jordan", "123"));
 		user.add(new Buyer("Ellen", "123"));
 		// same for more sellers/buyers
 
-		//auction.add(new Auction(1.50, 2.50, ("12-12-2012"), new Item("Ball")));
+		auctions.add(new Auction(1.50, 2.50, LocalDateTime.now().plusSeconds(70), Status.ACTIVE, new Item("Ball")));
 		// same for adding more auctions
-	}
+		itemList.add(new Item("Shoe"));
 
-	public static void entryMenu() {
-		loadData();
 		System.out.println("-- eAuction System --");
 
 		System.out.println();
@@ -44,7 +39,8 @@ public class Sys {
 			System.out.println("1 - [L]og In");
 			System.out.println("2 - [B]rowse Auctions");
 			System.out.println("3 - [S]etup Account");
-			System.out.println("4 - [Q]uit");
+			// System.out.println("4 - [A]dmin");
+			System.out.println("5 - [Q]uit");
 			System.out.print("Pick : ");
 
 			selection = S.next().toUpperCase();
@@ -57,9 +53,9 @@ public class Sys {
 			}
 			case "2":
 			case "B": {
-				// browseAuction();
+				viewAuctions();
 				// showUsers();
-				sellerMenu();
+				// sellerMenu();
 				// buyerMenu();
 				break;
 			}
@@ -68,26 +64,28 @@ public class Sys {
 				setupAccount();
 				break;
 			}
-			case "5":
+			case "4":
 			case "V": {
 				showUsers();
 				break;
 			}
 			}
-		} while (!selection.equals("Q") & !selection.equals("4"));
+		} while (!selection.equals("Q") & !selection.equals("5"));
 
 		// best practise to close scanners.
 		S.close();
 
 		System.out.println("-- GOODBYE --");
+		// Safety
+		System.exit(0);
 	}
 
-	private static void logIn() {
+	private void logIn() {
 		System.out.print("Please Enter Username : ");
-		String username = S.next().toUpperCase();
+		String username = S.next();
 
 		System.out.print("Please Enter Password : ");
-		String password = S.next().toUpperCase();
+		String password = S.next();
 
 		User user = getUsername(username);
 
@@ -95,32 +93,36 @@ public class Sys {
 			if (user.checkPassword(password)) {
 				if (Seller.class.isInstance(user)) {
 					seller = Seller.class.cast(user);
-					// if (!Seller.isBlocked()) {
-					sellerMenu();
+					if (!Seller.isBlocked()) {
+						sellerMenu();
+					}
 				} else {
 					buyer = Buyer.class.cast(user);
 					buyerMenu();
 				}
 			}
-			// }
+		} else {
+			System.out.println("No Entry");
 		}
-		// System.out.println("No Entry");
 	}
 
-	public static User getUsername(String username) {
+	private User getUsername(String username) {
+
 		/*
-		 * user.stream() .filter(o -> o.getUsername().equals(username));
-		 * if(o.isPresent()) { return o.get();
+		 * user.stream() .filter(o -> o.getUsername().equals(username)).forEach(o ->
+		 * o.); if(o -> o.isPresent()) { return o.get(); }
 		 */
+
 		for (User user : user) {
 			if (user.getUsername().equals(username)) {
 				return user;
 			}
 		}
 		return null;
+
 	}
 
-	public static void sellerMenu() {
+	public void sellerMenu() {
 		String selection;
 
 		do {
@@ -132,7 +134,7 @@ public class Sys {
 			System.out.println("5 - [Q]uit");
 			System.out.print("Pick : ");
 
-			selection = S.next().toUpperCase();
+			selection = S.next();
 
 			switch (selection) {
 			case "1":
@@ -163,7 +165,7 @@ public class Sys {
 		} while (!selection.equals("Q") & !selection.equals("5"));
 	}
 
-	public static void buyerMenu() {
+	public void buyerMenu() {
 		String selection;
 
 		do {
@@ -184,25 +186,39 @@ public class Sys {
 			}
 			case "2":
 			case "R": {
-				// browseAuction();
-				// showUsers();
+				browseAuction();
 				break;
 			}
 			case "3":
 			case "V": {
-				// setupAccount();
 				break;
 			}
 			}
 		} while (!selection.equals("Q") & !selection.equals("4"));
 	}
 
-	public static void browseAuction() {
-		System.out.print("-- BROWSE AUCTION -- \n");
+	public void browseAuction() {
+		System.out.print("-- BROWSE ACTIVE AUCTION -- \n");
+		// List<Auction> auctions = this.auction.stream().filter(o ->)
+		// List<Auction> auctions = new LinkedList<Auction>();
 
+		for (Auction auction : auctions) {
+			if (auction.getStatus().equals(Status.ACTIVE)) {
+				// auctions.add(auction);
+				System.out.println(auctions.toString());
+			}
+		}
+		if (auctions.isEmpty()) {
+			System.out.println("-- NO ACTIVE AUCTIONS --");
+			return;
+		}
+	}
+	
+	private void bidOnAuction() {
+		
 	}
 
-	public static void setupAccount() {
+	public void setupAccount() {
 		String newUser = "";
 		System.out.print("-- SETUP ACCOUNT -- \n");
 		// need a new username - check is already exists
@@ -232,41 +248,31 @@ public class Sys {
 	}
 
 	// when new item added, it changes every item in list to that item.
-	private static void createItem() {
+	private void createItem() {
 		System.out.print("Item Description : ");
 		String item = S.next();
 
-		itemList.add(new Item(item));
-/*		if (itemList.isEmpty() & !Item.getDescription().equals(item)) {
+		// itemList.add(new Item(item));
+		if (itemList.isEmpty() & !Item.getDescription().equals(item)) {
 			itemList.add(new Item(item));
 			System.out.println("-- ITEM CREATED -- \n");
 		} else {
 			System.out.println("-- ITEM ALREADY EXISTS -- \n");
+			return;
 		}
-*/
+
 	}
 
-	private static void createAuction() {
+	private void createAuction() {
 		String chooseItem = "";
 
 		for (int i = 0; i < itemList.size(); i++) {
 			System.out.println(itemList.get(i).toString());
 		}
-
-		/*
-		 * Error with -- NO ITEM CREATED -- repeating. do {
-		 * 
-		 * if(items.isEmpty()) { System.out.print("--NO CREATED --"); } else {
-		 * System.out.print("Choose From List : "); chooseItem = S.next(); }
-		 * 
-		 * } while (!chooseItem.equals(Item.getDescription()));
-		 * 
-		 */
-
 		do {
-
 			if (itemList.isEmpty()) {
-				System.out.print("--NO ITEMS CREATED --");
+				System.out.println("--NO ITEMS CREATED -- \n");
+				return;
 			} else {
 				System.out.print("Choose From List : ");
 				chooseItem = S.next();
@@ -274,21 +280,28 @@ public class Sys {
 		} while (!chooseItem.equals(Item.getDescription()));
 
 		System.out.print("Start Price : ");
-		Double choosePrice = S.nextDouble();
-		
-		System.out.print("Reserve Price  : ");
-		Double chooseReservePrice = S.nextDouble();
-		
-		System.out.print("Closing Date [E.g 09-04-2019] : ");
-		String chooseStartDate = S.next();
-		try {
-			Date d = dateFormat.parse(chooseStartDate);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			System.out.println("Date entered in wrong format, Please try again");
-		}
-		auction.add(new Auction(choosePrice, chooseReservePrice, chooseStartDate, new Item(chooseItem)));
+		Double choosePrice = Double.parseDouble(S.next());
 
+		System.out.print("Reserve Price  : ");
+		Double chooseReservePrice = Double.parseDouble(S.next());
+
+		System.out.print("Closing Date [E.g 9 Apr 19 12:00] : ");
+		LocalDateTime chooseStartDate = LocalDateTime.parse(S.next(), DateTimeFormatter.ofPattern("d MMM yy HH:mm"));
+
+		Auction auction = new Auction(choosePrice, chooseReservePrice, chooseStartDate, Status.ACTIVE,
+				new Item(chooseItem));
+
+		System.out.print("Activate Auction? [Y/N] : ");
+		String choice = S.next().toUpperCase();
+		do {
+			if (choice.equals("Y")) {
+				auction.activate();
+				auctions.add(auction);
+				System.out.print("-- AUCTION ACTIVATED --");
+			} else if (choice.equals("N")) {
+				System.out.print("-- AUCTION NOT ACTIVATED --");
+			}
+		} while (!choice.equals("Y") || choice.equals("N"));
 	}
 
 	public void placeAuction() {
@@ -296,8 +309,8 @@ public class Sys {
 	}
 
 	// Test to ensure users were added.
-
-	private static void showUsers() {
+	//Can be implemented into an amdin menu.
+	private void showUsers() {
 		for (int i = 0; i < user.size(); i++) {
 			System.out.println(user.get(i).toString());
 		}
@@ -305,17 +318,17 @@ public class Sys {
 
 	// Test to ensure items are created.
 
-	private static void viewItem() {
+	private void viewItem() {
 
 		for (int i = 0; i < itemList.size(); i++) {
 			System.out.println(itemList.get(i).toString());
 		}
 	}
-	
-	private static void viewAuctions() {
 
-		for (int i = 0; i < auction.size(); i++) {
-			System.out.println(auction.get(i).toString());
+	private void viewAuctions() {
+
+		for (int i = 0; i < auctions.size(); i++) {
+			System.out.println(auctions.get(i).toString());
 		}
 	}
 
@@ -330,12 +343,11 @@ public class Sys {
 	 */
 
 	public static void main(String[] args) {
-		entryMenu();
-
+		new Sys();
 	}
 
 	public void run() {
-		entryMenu();
+		new Sys();
 
 	}
 }

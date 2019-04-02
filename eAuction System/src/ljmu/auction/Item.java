@@ -15,7 +15,7 @@ public class Item {
 
 	@Override
 	public String toString() {
-		return "Item : " + description;
+		return description;
 	}
 
 	public static String getDescription() {
