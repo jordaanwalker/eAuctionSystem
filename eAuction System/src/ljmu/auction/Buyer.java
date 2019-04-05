@@ -1,6 +1,11 @@
 package ljmu.auction;
-public class Buyer extends User{
 
+import java.util.LinkedList;
+import java.util.List;
+
+public final class Buyer extends User{
+
+	private List<Auction> wins = new LinkedList<Auction>();
 	public Buyer(String username, String password) {
 		super(username, password);
 	}

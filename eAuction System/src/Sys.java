@@ -14,20 +14,31 @@ public class Sys {
 
 	private List<Auction> auctions = Collections.synchronizedList(new LinkedList<Auction>());
 	private List<User> user = Collections.synchronizedList(new LinkedList<User>());
+	
 	private List<Item> itemList = Collections.synchronizedList(new LinkedList<Item>());
 
 	private Seller seller;
 	private Buyer buyer;
+	private Admin adminastrator;
 
 	public Sys() {
-		user.add(new Seller("Jordan", "123"));
-		user.add(new Buyer("Ellen", "123"));
-		// same for more sellers/buyers
+		try {
+			//deSerialise();
+			user.add(new Seller("Glyn", "123"));
+			user.add(new Seller("Jordan", "123"));
+			user.add(new Buyer("Glenn", "123"));
+			user.add(new Buyer("Matty", "123"));
+			user.add(new Admin("Liverpool", "123"));
+			// same for more sellers/buyers
+//seller.class.cast(user.get(0).getItems
+			auctions.add(new Auction(1.50, 2.50, LocalDateTime.now().plusSeconds(70), Status.ACTIVE, new Item("Ball")));
+			// same for adding more auctions
 
-		auctions.add(new Auction(1.50, 2.50, LocalDateTime.now().plusSeconds(70), Status.ACTIVE, new Item("Ball")));
-		// same for adding more auctions
-		itemList.add(new Item("Shoe"));
-
+			// auctions.get(0).placeBid(5.50, Buyer.class.cast(user.get(1)),
+			// LocalDateTime.now());
+		} catch (Exception e) {
+			System.out.print(e.getMessage() + "\n");
+		}
 		System.out.println("-- eAuction System --");
 
 		System.out.println();
@@ -36,10 +47,10 @@ public class Sys {
 
 		do {
 			System.out.println("-- MAIN MENU --");
-			System.out.println("1 - [L]og In");
-			System.out.println("2 - [B]rowse Auctions");
+			System.out.println("1 - [U]ser Log In");
+			System.out.println("2 - [A]dmin Log In");
 			System.out.println("3 - [S]etup Account");
-			// System.out.println("4 - [A]dmin");
+			System.out.println("4 - [B]rowse Auctions");
 			System.out.println("5 - [Q]uit");
 			System.out.print("Pick : ");
 
@@ -47,16 +58,13 @@ public class Sys {
 
 			switch (selection) {
 			case "1":
-			case "L": {
-				logIn();
+			case "U": {
+				userLogIn();
 				break;
 			}
 			case "2":
-			case "B": {
-				viewAuctions();
-				// showUsers();
-				// sellerMenu();
-				// buyerMenu();
+			case "A": {
+				adminLogIn();
 				break;
 			}
 			case "3":
@@ -65,8 +73,8 @@ public class Sys {
 				break;
 			}
 			case "4":
-			case "V": {
-				showUsers();
+			case "B": {
+				viewAuctions();
 				break;
 			}
 			}
@@ -75,12 +83,14 @@ public class Sys {
 		// best practise to close scanners.
 		S.close();
 
-		System.out.println("-- GOODBYE --");
+		//serialize();
+		
+		System.out.println("\n-- GOODBYE --");
 		// Safety
 		System.exit(0);
 	}
 
-	private void logIn() {
+	private void userLogIn() {
 		System.out.print("Please Enter Username : ");
 		String username = S.next();
 
@@ -88,6 +98,7 @@ public class Sys {
 		String password = S.next();
 
 		User user = getUsername(username);
+		// try {
 
 		if (user != null) {
 			if (user.checkPassword(password)) {
@@ -95,15 +106,44 @@ public class Sys {
 					seller = Seller.class.cast(user);
 					if (!Seller.isBlocked()) {
 						sellerMenu();
+					} else {
+						System.out.println("-- SELLER BLOCKED --\n");
 					}
-				} else {
+				} else if (Buyer.class.isInstance(user)) {
 					buyer = Buyer.class.cast(user);
 					buyerMenu();
+				} else {
+					System.out.println("-- ENTER VALID CREDENTIALS --\n");
 				}
 			}
-		} else {
-			System.out.println("No Entry");
 		}
+		// } catch(Exception e) {
+		// System.out.println("");
+		// }
+	}
+
+	public void adminLogIn() {
+		System.out.print("Please Enter Username : ");
+		String adminUsername = S.next();
+
+		System.out.print("Please Enter Password : ");
+		String password = S.next();
+
+		User user = getUsername(adminUsername);
+
+		if (user != null) {
+			if (user.checkPassword(password)) {
+				if (Admin.class.isInstance(user)) {
+					adminastrator = Admin.class.cast(user);
+					adminMenu();
+
+				} else {
+					System.out.println("-- ENTER VALID CREDENTIALS --\n");
+
+				}
+			}
+		}
+
 	}
 
 	private User getUsername(String username) {
@@ -126,7 +166,7 @@ public class Sys {
 		String selection;
 
 		do {
-			System.out.println("-- SELLER MENU --");
+			System.out.println("\n-- SELLER MENU --");
 			System.out.println("1 - [C]reate Item");
 			System.out.println("2 - [S]tart Auction");
 			System.out.println("3 - [V]iew Your Auction");
@@ -134,7 +174,7 @@ public class Sys {
 			System.out.println("5 - [Q]uit");
 			System.out.print("Pick : ");
 
-			selection = S.next();
+			selection = S.next().toUpperCase();
 
 			switch (selection) {
 			case "1":
@@ -163,15 +203,16 @@ public class Sys {
 			}
 			}
 		} while (!selection.equals("Q") & !selection.equals("5"));
+		System.out.println("");
 	}
 
 	public void buyerMenu() {
 		String selection;
 
 		do {
-			System.out.println("-- BUYER MENU --");
+			System.out.println("\n-- BUYER MENU --");
 			System.out.println("1 - [B]id On Auction");
-			System.out.println("2 - B[R]owse Auction");
+			System.out.println("2 - B[R]owse Auctions");
 			System.out.println("3 - [V]iew Your Auction");
 			System.out.println("4 - [Q]uit");
 			System.out.print("Pick : ");
@@ -195,10 +236,44 @@ public class Sys {
 			}
 			}
 		} while (!selection.equals("Q") & !selection.equals("4"));
+		System.out.println("");
+	}
+
+	public void adminMenu() {
+		String selection;
+
+		do {
+			System.out.println("\n-- ADMIN MENU --");
+			System.out.println("1 - [B]lock Seller");
+			System.out.println("2 - Block [A]uction");
+			System.out.println("3 - [V]iew Users");
+			System.out.println("4 - [Q]uit");
+			System.out.print("Pick : ");
+
+			selection = S.next().toUpperCase();
+
+			switch (selection) {
+			case "1":
+			case "B": {
+				blockSeller();
+				break;
+			}
+			case "2":
+			case "A": {
+				browseAuction();
+				break;
+			}
+			case "3":
+			case "V": {
+				break;
+			}
+			}
+		} while (!selection.equals("Q") & !selection.equals("4"));
+		System.out.println("");
 	}
 
 	public void browseAuction() {
-		System.out.print("-- BROWSE ACTIVE AUCTION -- \n");
+		System.out.print("\n-- BROWSE ACTIVE AUCTION -- \n");
 		// List<Auction> auctions = this.auction.stream().filter(o ->)
 		// List<Auction> auctions = new LinkedList<Auction>();
 
@@ -213,22 +288,22 @@ public class Sys {
 			return;
 		}
 	}
-	
+
 	private void bidOnAuction() {
-		
+
 	}
 
 	public void setupAccount() {
 		String newUser = "";
-		System.out.print("-- SETUP ACCOUNT -- \n");
+		System.out.print("\n-- SETUP ACCOUNT -- \n");
 		// need a new username - check is already exists
 		// need a password
 		// save to a .txt file
 		do {
-			System.out.print("Please Select Type Of User [S/B] : ");
+			System.out.print("Please Select Type Of User [S/B/A] : ");
 			newUser = S.next().toUpperCase();
 
-		} while (!newUser.equals("S") & !newUser.equals("B"));
+		} while (!newUser.equals("S") & !newUser.equals("B") & !newUser.equals("A"));
 
 		System.out.print("Please Enter a Username : ");
 		String newUsername = S.next();
@@ -243,8 +318,12 @@ public class Sys {
 		if (newUser.equals("B")) {
 			user.add(new Buyer(newUsername, newPassword));
 		}
+
+		if (newUser.equals("A")) {
+			user.add(new Admin(newUsername, newPassword));
+		}
 		// user.add(new User(newUsername, newPassword));
-		System.out.print("Your account has been created - Sign in to view! \n");
+		System.out.println("\n-- ACCOUNT CREATED --\n");
 	}
 
 	// when new item added, it changes every item in list to that item.
@@ -309,10 +388,33 @@ public class Sys {
 	}
 
 	// Test to ensure users were added.
-	//Can be implemented into an amdin menu.
+	// Can be implemented into an amdin menu.
 	private void showUsers() {
-		for (int i = 0; i < user.size(); i++) {
-			System.out.println(user.get(i).toString());
+		/*
+		 * for (int i = 0; i < user.size(); i++) {
+		 * System.out.println(user.get(i).toString()); }
+		 */
+		System.out.print("Please Enter Username : ");
+		String username = S.next();
+
+		User user = getUsername(username);
+		do {
+			if (Seller.class.isInstance(user)) {
+				System.out.println(user.toString());
+				break;
+			} else {
+				System.out.print("\n-- INVALID USERNAME --\n");
+				return;
+			}
+		} while (!username.equals(Seller.class.isInstance(user)));
+
+		System.out.print("Block? [Y/N] : ");
+		String choice = S.next();
+		if (choice.equals("Y")) {
+			seller.setBlocked();
+			System.out.print("\n-- SELLER BLOCKED --\n");
+		} else {
+			System.out.print("\n-- SELLER NOT BLOCKED --\n");
 		}
 	}
 
@@ -350,4 +452,19 @@ public class Sys {
 		new Sys();
 
 	}
+
+	public void blockSeller() {
+		showUsers();
+	}
+
+	public void getBidOnAuctions() {
+	}
+	public void deSerialise() {
+		
+	}
+	
+	public void serialise() {
+		
+	}
+	
 }

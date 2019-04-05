@@ -1,8 +1,9 @@
 package ljmu.auction;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class Auction {
+public final class Auction implements Blockable, Serializable{
 	private double startPrice;
 	private double reservePrice;
 	private LocalDateTime closeDate;
@@ -19,7 +20,7 @@ public class Auction {
 	}
 
 	
-	public void placeBid() {
+	public void placeBid(double d, Buyer buyer, LocalDateTime localDateTime) {
 		
 	}
 	

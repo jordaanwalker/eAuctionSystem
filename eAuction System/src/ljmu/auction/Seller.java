@@ -1,5 +1,5 @@
 package ljmu.auction;
-public class Seller extends User {
+public final class Seller extends User implements Blockable {
 
 	
 	
@@ -13,7 +13,7 @@ public class Seller extends User {
 	}
 	
 	public void setBlocked() {
-		
+	
 	}
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub

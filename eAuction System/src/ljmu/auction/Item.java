@@ -1,6 +1,8 @@
 package ljmu.auction;
 
-public class Item {
+import java.io.Serializable;
+
+public class Item implements Serializable {
 	
 	private static String description;
 	

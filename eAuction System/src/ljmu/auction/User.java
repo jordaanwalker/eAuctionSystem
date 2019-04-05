@@ -1,11 +1,14 @@
 package ljmu.auction;
+
+import java.io.Serializable;
+
 /**
  * <i> User class is abstract.
  * @author Jordan Walker
  * @see <I>Seller</i>
  * @see <i>Buyer</i>
  */
-public class User {
+public class User implements Serializable {
 	protected String username;
 	protected String password;
 	
