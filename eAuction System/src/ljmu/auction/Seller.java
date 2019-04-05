@@ -1,6 +1,10 @@
 package ljmu.auction;
-public final class Seller extends User implements Blockable {
 
+import java.util.List;
+
+public final class Seller extends User implements Blockable {
+private boolean blocked = true;
+private List<Item> items;
 	
 	
 	
@@ -12,12 +16,17 @@ public final class Seller extends User implements Blockable {
 		return false;
 	}
 	
-	public void setBlocked() {
-	
+	public boolean setBlocked() {
+	return blocked;
 	}
+
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
 	}
 
+	public List<Item> getItems() {
+		// TODO Auto-generated method stub
+		return items;
+	}
 }

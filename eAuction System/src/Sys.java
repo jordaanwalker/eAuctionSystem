@@ -1,4 +1,8 @@
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
@@ -11,10 +15,11 @@ import ljmu.auction.*;
 public class Sys {
 
 	private static final Scanner S = new Scanner(System.in);
-
+	private static final String PATH = "/Users/jordanwalker/Eclipse/eclipse-workspace/CWData/";
+	
+	
 	private List<Auction> auctions = Collections.synchronizedList(new LinkedList<Auction>());
 	private List<User> user = Collections.synchronizedList(new LinkedList<User>());
-	
 	private List<Item> itemList = Collections.synchronizedList(new LinkedList<Item>());
 
 	private Seller seller;
@@ -30,7 +35,9 @@ public class Sys {
 			user.add(new Buyer("Matty", "123"));
 			user.add(new Admin("Liverpool", "123"));
 			// same for more sellers/buyers
-//seller.class.cast(user.get(0).getItems
+			//Seller.class.cast(user.get(1)).getItems().add(new Item("Ball"));
+			//Seller.class.cast(user.get(0)).getItems().add(new Item("Shoe"));
+			
 			auctions.add(new Auction(1.50, 2.50, LocalDateTime.now().plusSeconds(70), Status.ACTIVE, new Item("Ball")));
 			// same for adding more auctions
 
@@ -83,7 +90,7 @@ public class Sys {
 		// best practise to close scanners.
 		S.close();
 
-		//serialize();
+		//serialise();
 		
 		System.out.println("\n-- GOODBYE --");
 		// Safety
@@ -460,11 +467,27 @@ public class Sys {
 	public void getBidOnAuctions() {
 	}
 	public void deSerialise() {
+		ObjectInputStream ois;
+		
+		try {
+			ois = new ObjectInputStream(new FileInputStream(PATH + "users.ser"));
+			 user = (List<User>)ois.readObject();
+			 ois.close();
+		} catch (Exception e ) {
+			System.out.println(e.getMessage());
+		}
 		
 	}
 	
 	public void serialise() {
+		ObjectOutputStream oos;
 		
+		try {
+			oos = new ObjectOutputStream(new FileOutputStream(PATH + "users.ser"));
+			oos.writeObject(user);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 	}
 	
 }

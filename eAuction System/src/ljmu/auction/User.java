@@ -1,6 +1,7 @@
 package ljmu.auction;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * <i> User class is abstract.
@@ -50,5 +51,4 @@ public class User implements Serializable {
 		// TODO Auto-generated method stub
 
 	}
-
 }
