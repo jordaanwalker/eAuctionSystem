@@ -35,10 +35,10 @@ public class Sys {
 			user.add(new Buyer("Matty", "123"));
 			user.add(new Admin("Liverpool", "123"));
 			// same for more sellers/buyers
-			//Seller.class.cast(user.get(1)).getItems().add(new Item("Ball"));
-			//Seller.class.cast(user.get(0)).getItems().add(new Item("Shoe"));
+			Seller.class.cast(user.get(1)).getItems().add(new Item("Ball"));
+			Seller.class.cast(user.get(0)).getItems().add(new Item("Shoe"));
 			
-			auctions.add(new Auction(1.50, 2.50, LocalDateTime.now().plusSeconds(70), Status.ACTIVE, new Item("Ball")));
+			auctions.add(new Auction(1.50, 2.50, LocalDateTime.now().plusSeconds(70), Status.ACTIVE, new Item("Ball"), seller));
 			// same for adding more auctions
 
 			// auctions.get(0).placeBid(5.50, Buyer.class.cast(user.get(1)),
@@ -375,7 +375,7 @@ public class Sys {
 		LocalDateTime chooseStartDate = LocalDateTime.parse(S.next(), DateTimeFormatter.ofPattern("d MMM yy HH:mm"));
 
 		Auction auction = new Auction(choosePrice, chooseReservePrice, chooseStartDate, Status.ACTIVE,
-				new Item(chooseItem));
+				new Item(chooseItem), Seller.class.cast(user));
 
 		System.out.print("Activate Auction? [Y/N] : ");
 		String choice = S.next().toUpperCase();

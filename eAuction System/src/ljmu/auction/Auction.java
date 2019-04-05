@@ -9,13 +9,15 @@ public final class Auction implements Blockable, Serializable{
 	private LocalDateTime closeDate;
 	private	Status status;
 	private Item item;
+	private Seller seller;
 	
-	public Auction(Double startPrice,Double reservePrice, LocalDateTime chooseStartDate, Status status, Item item) {
+	public Auction(Double startPrice,Double reservePrice, LocalDateTime chooseStartDate, Status status, Item item, Seller seller) {
 		this.startPrice = startPrice;
 		this.reservePrice = reservePrice;
 		this.closeDate = chooseStartDate;
 		this.status = status;
 		this.item = item;
+		this.seller = seller;
 		
 	}
 
