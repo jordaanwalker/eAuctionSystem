@@ -16,8 +16,8 @@ public class Sys {
 
 	private static final Scanner S = new Scanner(System.in);
 	private static final String PATH = "/Users/jordanwalker/Eclipse/eclipse-workspace/CWData/";
-	
-	
+
+
 	private List<Auction> auctions = Collections.synchronizedList(new LinkedList<Auction>());
 	private List<User> user = Collections.synchronizedList(new LinkedList<User>());
 	private List<Item> itemList = Collections.synchronizedList(new LinkedList<Item>());
@@ -35,9 +35,9 @@ public class Sys {
 			user.add(new Buyer("Matty", "123"));
 			user.add(new Admin("Liverpool", "123"));
 			// same for more sellers/buyers
-			Seller.class.cast(user.get(1)).getItems().add(new Item("Ball"));
-			Seller.class.cast(user.get(0)).getItems().add(new Item("Shoe"));
-			
+			//Seller.class.cast(user.get(1)).getItems().add(new Item("Ball"));
+			//Seller.class.cast(user.get(0)).getItems().add(new Item("Shoe"));
+
 			auctions.add(new Auction(1.50, 2.50, LocalDateTime.now().plusSeconds(70), Status.ACTIVE, new Item("Ball"), seller));
 			// same for adding more auctions
 
@@ -91,7 +91,7 @@ public class Sys {
 		S.close();
 
 		//serialise();
-		
+
 		System.out.println("\n-- GOODBYE --");
 		// Safety
 		System.exit(0);
@@ -119,6 +119,10 @@ public class Sys {
 				} else if (Buyer.class.isInstance(user)) {
 					buyer = Buyer.class.cast(user);
 					buyerMenu();
+				} else if (Admin.class.isInstance(user)) {
+					adminastrator = Admin.class.cast(user);
+					adminMenu();
+
 				} else {
 					System.out.println("-- ENTER VALID CREDENTIALS --\n");
 				}
@@ -468,20 +472,20 @@ public class Sys {
 	}
 	public void deSerialise() {
 		ObjectInputStream ois;
-		
+
 		try {
 			ois = new ObjectInputStream(new FileInputStream(PATH + "users.ser"));
-			 user = (List<User>)ois.readObject();
-			 ois.close();
+			user = (List<User>)ois.readObject();
+			ois.close();
 		} catch (Exception e ) {
 			System.out.println(e.getMessage());
 		}
-		
+
 	}
-	
+
 	public void serialise() {
 		ObjectOutputStream oos;
-		
+
 		try {
 			oos = new ObjectOutputStream(new FileOutputStream(PATH + "users.ser"));
 			oos.writeObject(user);
@@ -489,5 +493,5 @@ public class Sys {
 			System.out.println(e.getMessage());
 		}
 	}
-	
+
 }

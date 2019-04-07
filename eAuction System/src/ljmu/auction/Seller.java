@@ -28,7 +28,7 @@ private List<Item> items;
 	public List<Item> getItems() {
 		// TODO Auto-generated method stub
 		return items;
-	}
+				}
 
 
 }
