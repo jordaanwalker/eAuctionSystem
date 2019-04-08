@@ -60,7 +60,7 @@ public final class Auction implements Blockable, Serializable{
 	@Override
 	public String toString() {
 		return String.format("Item : %s \nStart Price : £%.2f \nReserve Price : £%.2f \n"+"Close Date : " + closeDate
-				+ " ", item, startPrice, reservePrice);
+				+ "\nSeller : " + seller + "", item, startPrice, reservePrice);
 	}
 //String.format("No:%02d  Type:%s  Price:%.2f  isBalcony:%s  isLounge:%s  isReserve:%s  %s",
 

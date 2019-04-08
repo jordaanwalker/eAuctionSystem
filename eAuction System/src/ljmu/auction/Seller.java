@@ -1,10 +1,11 @@
 package ljmu.auction;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public final class Seller extends User implements Blockable {
 private boolean blocked = true;
-private List<Item> items;
+private List<Item> items = new LinkedList<Item>();
 	
 	
 	
@@ -25,10 +26,9 @@ private List<Item> items;
 
 	}
 
-	public List<Item> getItems() {
-		// TODO Auto-generated method stub
+	public  List<Item> getItems() {
 		return items;
-				}
 
 
+}
 }

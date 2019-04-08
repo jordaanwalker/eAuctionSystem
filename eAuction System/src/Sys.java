@@ -20,7 +20,6 @@ public class Sys {
 
 	private List<Auction> auctions = Collections.synchronizedList(new LinkedList<Auction>());
 	private List<User> user = Collections.synchronizedList(new LinkedList<User>());
-	private List<Item> itemList = Collections.synchronizedList(new LinkedList<Item>());
 
 	private Seller seller;
 	private Buyer buyer;
@@ -35,8 +34,8 @@ public class Sys {
 			user.add(new Buyer("Matty", "123"));
 			user.add(new Admin("Liverpool", "123"));
 			// same for more sellers/buyers
-			//Seller.class.cast(user.get(1)).getItems().add(new Item("Ball"));
-			//Seller.class.cast(user.get(0)).getItems().add(new Item("Shoe"));
+			Seller.class.cast(user.get(0)).getItems().add(new Item("Ball"));
+			Seller.class.cast(user.get(0)).getItems().add(new Item("Shoe"));
 
 			auctions.add(new Auction(1.50, 2.50, LocalDateTime.now().plusSeconds(70), Status.ACTIVE, new Item("Ball"), seller));
 			// same for adding more auctions
@@ -177,7 +176,7 @@ public class Sys {
 		String selection;
 
 		do {
-			System.out.println("\n-- SELLER MENU --");
+			System.out.println("\n- SELLER MENU --");
 			System.out.println("1 - [C]reate Item");
 			System.out.println("2 - [S]tart Auction");
 			System.out.println("3 - [V]iew Your Auction");
@@ -190,7 +189,7 @@ public class Sys {
 			switch (selection) {
 			case "1":
 			case "C": {
-				createItem();
+				//createItem();
 				break;
 			}
 			case "2":
@@ -204,7 +203,8 @@ public class Sys {
 			case "3":
 			case "V": {
 				// setupAccount();
-				viewItem();
+				//viewItem();
+				//Seller.getItems();
 				break;
 			}
 			case "4":
@@ -338,7 +338,7 @@ public class Sys {
 	}
 
 	// when new item added, it changes every item in list to that item.
-	private void createItem() {
+	/*private void createItem() {
 		System.out.print("Item Description : ");
 		String item = S.next();
 
@@ -351,16 +351,16 @@ public class Sys {
 			return;
 		}
 
-	}
+	}*/
 
 	private void createAuction() {
 		String chooseItem = "";
 
-		for (int i = 0; i < itemList.size(); i++) {
-			System.out.println(itemList.get(i).toString());
+		for (int i = 0; i < Seller.class.cast(user.get(0)).getItems().size(); i++) {
+			System.out.println(Seller.class.cast(user.get(0)).getItems().toString());
 		}
 		do {
-			if (itemList.isEmpty()) {
+			if (Seller.class.cast(user.get(0)).getItems().isEmpty()) {
 				System.out.println("--NO ITEMS CREATED -- \n");
 				return;
 			} else {
@@ -431,12 +431,12 @@ public class Sys {
 
 	// Test to ensure items are created.
 
-	private void viewItem() {
+/*	private void viewItem() {
 
 		for (int i = 0; i < itemList.size(); i++) {
 			System.out.println(itemList.get(i).toString());
 		}
-	}
+	}*/
 
 	private void viewAuctions() {
 
