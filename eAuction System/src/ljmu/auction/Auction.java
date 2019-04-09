@@ -1,5 +1,6 @@
 package ljmu.auction;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -27,6 +28,7 @@ public final class Auction implements Blockable, Serializable{
 	}
 	
 	public void verify() {
+		
 		
 	}
 	
@@ -60,7 +62,7 @@ public final class Auction implements Blockable, Serializable{
 	@Override
 	public String toString() {
 		return String.format("Item : %s \nStart Price : £%.2f \nReserve Price : £%.2f \n"+"Close Date : " + closeDate
-				+ "\nSeller : " + seller + "", item, startPrice, reservePrice);
+				+ "\nSeller : " + seller + "\n", item, startPrice, reservePrice);
 	}
 //String.format("No:%02d  Type:%s  Price:%.2f  isBalcony:%s  isLounge:%s  isReserve:%s  %s",
 
@@ -113,6 +115,9 @@ public final class Auction implements Blockable, Serializable{
 		status = Status.ACTIVE;
 		
 	}
-	
+	public Item getItem() {
+		return item;
+		
+	}
 	
 }

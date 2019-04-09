@@ -1,4 +1,3 @@
-
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -17,9 +16,8 @@ public class Sys {
 	private static final Scanner S = new Scanner(System.in);
 	private static final String PATH = "/Users/jordanwalker/Eclipse/eclipse-workspace/CWData/";
 
-
-	private List<Auction> auctions = Collections.synchronizedList(new LinkedList<Auction>());
-	private List<User> user = Collections.synchronizedList(new LinkedList<User>());
+	private List<Auction> auctions = new LinkedList<Auction>();
+	private List<User> user = new LinkedList<User>();
 
 	private Seller seller;
 	private Buyer buyer;
@@ -27,7 +25,7 @@ public class Sys {
 
 	public Sys() {
 		try {
-			//deSerialise();
+			// deSerialise();
 			user.add(new Seller("Glyn", "123"));
 			user.add(new Seller("Jordan", "123"));
 			user.add(new Buyer("Glenn", "123"));
@@ -37,7 +35,12 @@ public class Sys {
 			Seller.class.cast(user.get(0)).getItems().add(new Item("Ball"));
 			Seller.class.cast(user.get(0)).getItems().add(new Item("Shoe"));
 
-			auctions.add(new Auction(1.50, 2.50, LocalDateTime.now().plusSeconds(70), Status.ACTIVE, new Item("Ball"), seller));
+			auctions.add(new Auction(1.50, 2.50, LocalDateTime.now().plusSeconds(70), Status.ACTIVE, new Item("Ball"),
+					Seller.class.cast(user.get(0))));
+			/*auctions.add(new Auction(1.50, 2.50, LocalDateTime.now().plusSeconds(70), Status.ACTIVE, new Item("Shoe"),
+					Seller.class.cast(user.get(0))));
+			auctions.add(new Auction(1.50, 2.50, LocalDateTime.now().plusSeconds(70), Status.ACTIVE, new Item("Shoe"),
+					Seller.class.cast(user.get(0))));*/
 			// same for adding more auctions
 
 			// auctions.get(0).placeBid(5.50, Buyer.class.cast(user.get(1)),
@@ -53,50 +56,47 @@ public class Sys {
 
 		do {
 			System.out.println("-- MAIN MENU --");
-			System.out.println("1 - [U]ser Log In");
-			System.out.println("2 - [A]dmin Log In");
-			System.out.println("3 - [S]etup Account");
-			System.out.println("4 - [B]rowse Auctions");
-			System.out.println("5 - [Q]uit");
+			System.out.println("1 - [U]ser / [A]dmin Log In");
+			System.out.println("2 - [S]etup Account");
+			System.out.println("3 - [B]rowse Auctions");
+			System.out.println("4 - [Q]uit");
 			System.out.print("Pick : ");
 
 			selection = S.next().toUpperCase();
 
 			switch (selection) {
 			case "1":
-			case "U": {
-				userLogIn();
-				break;
-			}
-			case "2":
+			case "U":
 			case "A": {
-				adminLogIn();
+				logIn();
 				break;
 			}
-			case "3":
+
+			case "2":
 			case "S": {
 				setupAccount();
 				break;
 			}
-			case "4":
+			case "3":
 			case "B": {
 				viewAuctions();
 				break;
 			}
 			}
-		} while (!selection.equals("Q") & !selection.equals("5"));
+		} while (!selection.equals("Q") & !selection.equals("4"));
 
 		// best practise to close scanners.
 		S.close();
 
-		//serialise();
+		// serialise();
 
 		System.out.println("\n-- GOODBYE --");
 		// Safety
 		System.exit(0);
 	}
 
-	private void userLogIn() {
+	private void logIn() {
+		System.out.print("\n-- CASE SENSITIVE --\n");
 		System.out.print("Please Enter Username : ");
 		String username = S.next();
 
@@ -104,57 +104,54 @@ public class Sys {
 		String password = S.next();
 
 		User user = getUsername(username);
-		// try {
+		try {
 
-		if (user != null) {
-			if (user.checkPassword(password)) {
-				if (Seller.class.isInstance(user)) {
-					seller = Seller.class.cast(user);
-					if (!Seller.isBlocked()) {
-						sellerMenu();
-					} else {
-						System.out.println("-- SELLER BLOCKED --\n");
+			if (user != null) {
+				if (user.checkPassword(password)) {
+					if (Seller.class.isInstance(user)) {
+						seller = Seller.class.cast(user);
+						if (!Seller.isBlocked()) {
+							sellerMenu();
+						} else {
+							System.out.println("-- SELLER BLOCKED --\n");
+						}
+					} else if (Buyer.class.isInstance(user)) {
+						buyer = Buyer.class.cast(user);
+						buyerMenu();
+					} else if (Admin.class.isInstance(user)) {
+						adminastrator = Admin.class.cast(user);
+						adminMenu();
 					}
-				} else if (Buyer.class.isInstance(user)) {
-					buyer = Buyer.class.cast(user);
-					buyerMenu();
-				} else if (Admin.class.isInstance(user)) {
-					adminastrator = Admin.class.cast(user);
-					adminMenu();
-
-				} else {
-					System.out.println("-- ENTER VALID CREDENTIALS --\n");
 				}
+			} else {
+				System.out.println("-- ENTER VALID CREDENTIALS --\n");
 			}
-		}
-		// } catch(Exception e) {
-		// System.out.println("");
-		// }
-	}
-
-	public void adminLogIn() {
-		System.out.print("Please Enter Username : ");
-		String adminUsername = S.next();
-
-		System.out.print("Please Enter Password : ");
-		String password = S.next();
-
-		User user = getUsername(adminUsername);
-
-		if (user != null) {
-			if (user.checkPassword(password)) {
-				if (Admin.class.isInstance(user)) {
-					adminastrator = Admin.class.cast(user);
-					adminMenu();
-
-				} else {
-					System.out.println("-- ENTER VALID CREDENTIALS --\n");
-
-				}
-			}
+		} catch (Exception e) {
+			System.out.println("");
 		}
 
 	}
+
+	// Added functionality into just one login system.
+	/*
+	 * public void adminLogIn() { System.out.print("Please Enter Username : ");
+	 * String adminUsername = S.next();
+	 * 
+	 * System.out.print("Please Enter Password : "); String password = S.next();
+	 * 
+	 * User user = getUsername(adminUsername);
+	 * 
+	 * if (user != null) { if (user.checkPassword(password)) { if
+	 * (Admin.class.isInstance(user)) { adminastrator = Admin.class.cast(user);
+	 * adminMenu();
+	 * 
+	 * } else if (User.class.isInstance(user)){
+	 * System.out.println("-- ENTER VALID CREDENTIALS --\n");
+	 * 
+	 * } } }
+	 * 
+	 * }
+	 */
 
 	private User getUsername(String username) {
 
@@ -189,12 +186,12 @@ public class Sys {
 			switch (selection) {
 			case "1":
 			case "C": {
-				//createItem();
+				// createItem();
 				break;
 			}
 			case "2":
 			case "S": {
-				createAuction();
+				placeAuction();
 				// browseAuction();
 				// showUsers();
 				// showItem();
@@ -203,8 +200,8 @@ public class Sys {
 			case "3":
 			case "V": {
 				// setupAccount();
-				//viewItem();
-				//Seller.getItems();
+				// viewItem();
+				// Seller.getItems();
 				break;
 			}
 			case "4":
@@ -286,7 +283,7 @@ public class Sys {
 	public void browseAuction() {
 		System.out.print("\n-- BROWSE ACTIVE AUCTION -- \n");
 		// List<Auction> auctions = this.auction.stream().filter(o ->)
-		// List<Auction> auctions = new LinkedList<Auction>();
+		List<Auction> auctions = new LinkedList<Auction>();
 
 		for (Auction auction : auctions) {
 			if (auction.getStatus().equals(Status.ACTIVE)) {
@@ -316,6 +313,8 @@ public class Sys {
 
 		} while (!newUser.equals("S") & !newUser.equals("B") & !newUser.equals("A"));
 
+		System.out.print("\n-- CASE SENSITIVE --\n");
+
 		System.out.print("Please Enter a Username : ");
 		String newUsername = S.next();
 
@@ -338,37 +337,27 @@ public class Sys {
 	}
 
 	// when new item added, it changes every item in list to that item.
-	/*private void createItem() {
-		System.out.print("Item Description : ");
-		String item = S.next();
+	/*
+	 * private void createItem() { System.out.print("Item Description : "); String
+	 * item = S.next();
+	 * 
+	 * // itemList.add(new Item(item)); if (itemList.isEmpty() &
+	 * !Item.getDescription().equals(item)) { itemList.add(new Item(item));
+	 * System.out.println("-- ITEM CREATED -- \n"); } else {
+	 * System.out.println("-- ITEM ALREADY EXISTS -- \n"); return; }
+	 * 
+	 * }
+	 */
 
-		// itemList.add(new Item(item));
-		if (itemList.isEmpty() & !Item.getDescription().equals(item)) {
-			itemList.add(new Item(item));
-			System.out.println("-- ITEM CREATED -- \n");
-		} else {
-			System.out.println("-- ITEM ALREADY EXISTS -- \n");
-			return;
-		}
+	private void placeAuction() {
+		
+		try {
+		
+		System.out.print("Item : ");
+		String chooseItem = S.next();
 
-	}*/
-
-	private void createAuction() {
-		String chooseItem = "";
-
-		for (int i = 0; i < Seller.class.cast(user.get(0)).getItems().size(); i++) {
-			System.out.println(Seller.class.cast(user.get(0)).getItems().toString());
-		}
-		do {
-			if (Seller.class.cast(user.get(0)).getItems().isEmpty()) {
-				System.out.println("--NO ITEMS CREATED -- \n");
-				return;
-			} else {
-				System.out.print("Choose From List : ");
-				chooseItem = S.next();
-			}
-		} while (!chooseItem.equals(Item.getDescription()));
-
+		Item item = seller.getItemByDescription(chooseItem);
+		
 		System.out.print("Start Price : ");
 		Double choosePrice = Double.parseDouble(S.next());
 
@@ -376,11 +365,13 @@ public class Sys {
 		Double chooseReservePrice = Double.parseDouble(S.next());
 
 		System.out.print("Closing Date [E.g 9 Apr 19 12:00] : ");
-		LocalDateTime chooseStartDate = LocalDateTime.parse(S.next(), DateTimeFormatter.ofPattern("d MMM yy HH:mm"));
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
+		LocalDateTime chooseCloseDate = LocalDateTime.parse(S.next(), formatter);
 
-		Auction auction = new Auction(choosePrice, chooseReservePrice, chooseStartDate, Status.ACTIVE,
-				new Item(chooseItem), Seller.class.cast(user));
+		 Auction auction = new Auction(choosePrice, chooseReservePrice, chooseCloseDate, Status.PENDING,
+				item, Seller.class.cast(user.get(0)));
 
+		 
 		System.out.print("Activate Auction? [Y/N] : ");
 		String choice = S.next().toUpperCase();
 		do {
@@ -392,10 +383,10 @@ public class Sys {
 				System.out.print("-- AUCTION NOT ACTIVATED --");
 			}
 		} while (!choice.equals("Y") || choice.equals("N"));
-	}
-
-	public void placeAuction() {
-
+		// }
+		} catch (Exception e) {
+			System.out.print(e.getMessage());
+		}
 	}
 
 	// Test to ensure users were added.
@@ -431,12 +422,12 @@ public class Sys {
 
 	// Test to ensure items are created.
 
-/*	private void viewItem() {
-
-		for (int i = 0; i < itemList.size(); i++) {
-			System.out.println(itemList.get(i).toString());
-		}
-	}*/
+	/*
+	 * private void viewItem() {
+	 * 
+	 * for (int i = 0; i < itemList.size(); i++) {
+	 * System.out.println(itemList.get(i).toString()); } }
+	 */
 
 	private void viewAuctions() {
 
@@ -470,14 +461,15 @@ public class Sys {
 
 	public void getBidOnAuctions() {
 	}
+
 	public void deSerialise() {
 		ObjectInputStream ois;
 
 		try {
 			ois = new ObjectInputStream(new FileInputStream(PATH + "users.ser"));
-			user = (List<User>)ois.readObject();
+			user = (List<User>) ois.readObject();
 			ois.close();
-		} catch (Exception e ) {
+		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 

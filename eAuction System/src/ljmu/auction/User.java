@@ -20,7 +20,7 @@ public class User implements Serializable {
 	
 	@Override
 	public String toString() {
-		return "User : " + username;
+		return username;
 	}
 
 	public String getUsername() {
@@ -46,6 +46,8 @@ public class User implements Serializable {
 			return false;
 		}
 	}
+	
+	
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
