@@ -1,6 +1,13 @@
 package ljmu.auction;
 
 import java.util.LinkedList;
+
+/**
+ * <i> Buyer class inherits username and password from abstract class User.</i>
+ * @author Jordan Walker
+ * @see <I>User</i>
+ */
+
 import java.util.List;
 
 public final class Buyer extends User{

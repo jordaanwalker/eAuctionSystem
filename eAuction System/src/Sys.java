@@ -8,7 +8,14 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
-import ljmu.auction.*;
+
+import ljmu.auction.Admin;
+import ljmu.auction.Auction;
+import ljmu.auction.Buyer;
+import ljmu.auction.Item;
+import ljmu.auction.Seller;
+import ljmu.auction.Status;
+import ljmu.auction.User;
 
 //Filename cannot be System.
 public class Sys {
@@ -16,7 +23,7 @@ public class Sys {
 	private static final Scanner S = new Scanner(System.in);
 	private static final String PATH = "/Users/jordanwalker/Eclipse/eclipse-workspace/CWData/";
 
-	private List<Auction> auctions = new LinkedList<Auction>();
+	private List<Auction> auctions = Collections.synchronizedList(new LinkedList<Auction>());
 	private List<User> user = new LinkedList<User>();
 
 	private Seller seller;
@@ -24,6 +31,7 @@ public class Sys {
 	private Admin adminastrator;
 
 	public Sys() {
+
 		try {
 			// deSerialise();
 			user.add(new Seller("Glyn", "123"));
@@ -31,16 +39,23 @@ public class Sys {
 			user.add(new Buyer("Glenn", "123"));
 			user.add(new Buyer("Matty", "123"));
 			user.add(new Admin("Liverpool", "123"));
-			// same for more sellers/buyers
-			Seller.class.cast(user.get(0)).getItems().add(new Item("Ball"));
-			Seller.class.cast(user.get(0)).getItems().add(new Item("Shoe"));
 
-			auctions.add(new Auction(1.50, 2.50, LocalDateTime.now().plusSeconds(70), Status.ACTIVE, new Item("Ball"),
-					Seller.class.cast(user.get(0))));
-			/*auctions.add(new Auction(1.50, 2.50, LocalDateTime.now().plusSeconds(70), Status.ACTIVE, new Item("Shoe"),
-					Seller.class.cast(user.get(0))));
-			auctions.add(new Auction(1.50, 2.50, LocalDateTime.now().plusSeconds(70), Status.ACTIVE, new Item("Shoe"),
-					Seller.class.cast(user.get(0))));*/
+			// same for more sellers/buyers
+			// Seller.class.cast(user.get(0)).getItems().add(new Item("Ball"));
+			// Seller.class.cast(user.get(0)).getItems().add(new Item("Shoe"));
+
+			// auctions.add(new Auction(1.50, 2.50, LocalDateTime.now().plusSeconds(70),
+			// Status.ACTIVE, new Item("Ball"),
+			// Seller.class.cast(user.get(0))));
+
+			auctions.add(new Auction(1.50, 2.50, LocalDateTime.now().plusSeconds(70), Status.PENDING, new Item("Ball"),
+					Seller.class.cast(user.get(1))));
+			/*
+			 * auctions.add(new Auction(1.50, 2.50, LocalDateTime.now().plusSeconds(70),
+			 * Status.ACTIVE, new Item("Shoe"), Seller.class.cast(user.get(0))));
+			 * auctions.add(new Auction(1.50, 2.50, LocalDateTime.now().plusSeconds(70),
+			 * Status.ACTIVE, new Item("Shoe"), Seller.class.cast(user.get(0))));
+			 */
 			// same for adding more auctions
 
 			// auctions.get(0).placeBid(5.50, Buyer.class.cast(user.get(1)),
@@ -79,7 +94,7 @@ public class Sys {
 			}
 			case "3":
 			case "B": {
-				viewAuctions();
+				browseAuction();
 				break;
 			}
 			}
@@ -159,7 +174,6 @@ public class Sys {
 		 * user.stream() .filter(o -> o.getUsername().equals(username)).forEach(o ->
 		 * o.); if(o -> o.isPresent()) { return o.get(); }
 		 */
-
 		for (User user : user) {
 			if (user.getUsername().equals(username)) {
 				return user;
@@ -177,7 +191,7 @@ public class Sys {
 			System.out.println("1 - [C]reate Item");
 			System.out.println("2 - [S]tart Auction");
 			System.out.println("3 - [V]iew Your Auction");
-			System.out.println("4 - [R]emove Item");
+			System.out.println("4 - [P]ending Auctions");
 			System.out.println("5 - [Q]uit");
 			System.out.print("Pick : ");
 
@@ -186,7 +200,7 @@ public class Sys {
 			switch (selection) {
 			case "1":
 			case "C": {
-				// createItem();
+				createItem();
 				break;
 			}
 			case "2":
@@ -202,11 +216,12 @@ public class Sys {
 				// setupAccount();
 				// viewItem();
 				// Seller.getItems();
+				browseAuction();
 				break;
 			}
 			case "4":
-			case "R": {
-				viewAuctions();
+			case "P": {
+				pendingAuction();
 				break;
 			}
 			}
@@ -221,7 +236,7 @@ public class Sys {
 			System.out.println("\n-- BUYER MENU --");
 			System.out.println("1 - [B]id On Auction");
 			System.out.println("2 - B[R]owse Auctions");
-			System.out.println("3 - [V]iew Your Auction");
+			System.out.println("3 - [V]iew Won Auctions");
 			System.out.println("4 - [Q]uit");
 			System.out.print("Pick : ");
 
@@ -230,7 +245,7 @@ public class Sys {
 			switch (selection) {
 			case "1":
 			case "B": {
-				//
+				bidOnAuction();
 				break;
 			}
 			case "2":
@@ -263,7 +278,7 @@ public class Sys {
 			switch (selection) {
 			case "1":
 			case "B": {
-				blockSeller();
+				blockSellerByUsername();
 				break;
 			}
 			case "2":
@@ -282,23 +297,42 @@ public class Sys {
 
 	public void browseAuction() {
 		System.out.print("\n-- BROWSE ACTIVE AUCTION -- \n");
-		// List<Auction> auctions = this.auction.stream().filter(o ->)
 		List<Auction> auctions = new LinkedList<Auction>();
 
-		for (Auction auction : auctions) {
+		for (Auction auction : this.auctions) {
 			if (auction.getStatus().equals(Status.ACTIVE)) {
-				// auctions.add(auction);
-				System.out.println(auctions.toString());
+				auctions.add(auction);
 			}
 		}
 		if (auctions.isEmpty()) {
-			System.out.println("-- NO ACTIVE AUCTIONS --");
-			return;
+			System.out.println("\n-- NO ACTIVE AUCTIONS --\n");
+		}
+
+		for (Auction auction : auctions) {
+			System.out.println(auction.toString());
 		}
 	}
 
 	private void bidOnAuction() {
 
+		for (Auction auction : auctions) {
+			if (auction.getStatus().equals(Status.ACTIVE)) {
+				System.out.println("\n" + auction.toString());
+			}
+		}
+
+		System.out.println("Select Item : ");
+		String chooseItem = S.next();
+
+		try {
+			for (Auction auction : auctions) {
+				if (chooseItem.equals(auction.getItem())) {
+				}
+
+			}
+		} catch (Exception e) {
+			System.out.print(e.getMessage());
+		}
 	}
 
 	public void setupAccount() {
@@ -350,40 +384,74 @@ public class Sys {
 	 */
 
 	private void placeAuction() {
-		
 		try {
-		
-		System.out.print("Item : ");
-		String chooseItem = S.next();
+			String chooseItem = "";
+			do {
+				if (Seller.class.cast(seller).getItems().isEmpty()) {
+					System.out.println("\n-- NO ITEMS CREATED--");
+					return;
+				} else {
 
-		Item item = seller.getItemByDescription(chooseItem);
-		
-		System.out.print("Start Price : ");
-		Double choosePrice = Double.parseDouble(S.next());
+					System.out.println("\n" + Seller.class.cast(seller).getItems());
 
-		System.out.print("Reserve Price  : ");
-		Double chooseReservePrice = Double.parseDouble(S.next());
+					System.out.println("-- CHOOSE FROM LIST ABOVE--");
+					System.out.print("Item : ");
+					chooseItem = S.next();
+				}
+			} while (!chooseItem.equals(Item.getDescription()));
 
-		System.out.print("Closing Date [E.g 9 Apr 19 12:00] : ");
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
-		LocalDateTime chooseCloseDate = LocalDateTime.parse(S.next(), formatter);
+			System.out.print("Start Price : ");
+			Double choosePrice = Double.parseDouble(S.next());
 
-		 Auction auction = new Auction(choosePrice, chooseReservePrice, chooseCloseDate, Status.PENDING,
-				item, Seller.class.cast(user.get(0)));
+			System.out.print("Reserve Price  : ");
+			Double chooseReservePrice = Double.parseDouble(S.next());
 
-		 
-		System.out.print("Activate Auction? [Y/N] : ");
-		String choice = S.next().toUpperCase();
-		do {
-			if (choice.equals("Y")) {
-				auction.activate();
-				auctions.add(auction);
-				System.out.print("-- AUCTION ACTIVATED --");
-			} else if (choice.equals("N")) {
-				System.out.print("-- AUCTION NOT ACTIVATED --");
+			System.out.print("Closing Date [E.g 15-Apr-2019-12:00] : ");
+			LocalDateTime chooseCloseDate = LocalDateTime.parse(S.next(),
+					DateTimeFormatter.ofPattern("dd-MMM-yyyy-HH:mm"));
+
+			Auction auction = new Auction(choosePrice, chooseReservePrice, chooseCloseDate, Status.PENDING,
+					new Item(chooseItem), Seller.class.cast(seller));
+
+			System.out.print("Activate Auction? [Y/N] : ");
+			String choice = S.next().toUpperCase();
+			do {
+				if (choice.equals("Y")) {
+					auction.activate();
+					auctions.add(auction);
+					System.out.print("\n-- AUCTION ACTIVATED --\n");
+					return;
+				} else if (choice.equals("N")) {
+					auction.verify();
+					auctions.add(auction);
+					System.out.print("\n-- AUCTION NOT ACTIVATED --\n");
+					return;
+				}
+			} while (!choice.equals("Y") || choice.equals("N"));
+			// }
+		} catch (Exception e) {
+			System.out.print(e.getMessage());
+		}
+	}
+
+	/*
+	 * public void createItem() { System.out.print("Please Enter Item : "); String
+	 * item = S.next();
+	 * 
+	 * Seller.class.cast(new Item(item)); return; }
+	 */
+
+	private void createItem() {
+		System.out.print("Item Description : ");
+		String item = S.next();
+		try {
+
+			if (!item.equals(Item.getDescription())) {
+				Seller.class.cast(seller).getItems().add(new Item(item));
+				System.out.print("\n-- ITEM CREATED --\n");
+			} else {
+				System.out.print("\n-- ITEM ALREADY EXISTS --\n");
 			}
-		} while (!choice.equals("Y") || choice.equals("N"));
-		// }
 		} catch (Exception e) {
 			System.out.print(e.getMessage());
 		}
@@ -391,7 +459,7 @@ public class Sys {
 
 	// Test to ensure users were added.
 	// Can be implemented into an amdin menu.
-	private void showUsers() {
+	private void blockSellerByUsername() {
 		/*
 		 * for (int i = 0; i < user.size(); i++) {
 		 * System.out.println(user.get(i).toString()); }
@@ -405,7 +473,7 @@ public class Sys {
 				System.out.println(user.toString());
 				break;
 			} else {
-				System.out.print("\n-- INVALID USERNAME --\n");
+				System.out.print("\n-- INVALID SELLER --\n");
 				return;
 			}
 		} while (!username.equals(Seller.class.isInstance(user)));
@@ -429,13 +497,6 @@ public class Sys {
 	 * System.out.println(itemList.get(i).toString()); } }
 	 */
 
-	private void viewAuctions() {
-
-		for (int i = 0; i < auctions.size(); i++) {
-			System.out.println(auctions.get(i).toString());
-		}
-	}
-
 	// public static Item getItem(String description) {
 	/*
 	 * user.stream() .filter(o -> o.getUsername().equals(username));
@@ -446,17 +507,58 @@ public class Sys {
 	 * return items; } } return null; }
 	 */
 
+	public void pendingAuction() {
+
+		System.out.print("\n-- VIEW PENDING AUCTIONS -- \n");
+		List<Auction> auctions = new LinkedList<Auction>();
+
+		for (Auction auction : this.auctions) {
+			if (auction.getStatus().equals(Status.PENDING)) {
+				auctions.add(auction);
+			}
+		}
+		if (auctions.isEmpty()) {
+			System.out.print("\n-- NO PENDING AUCTIONS --\n");
+			return;
+		}
+
+		for (Auction auction : auctions) {
+			System.out.print("\n" + auction.toString());
+		}
+
+		String item;
+		do {
+			System.out.print("Please Select Auction : ");
+			item = S.next();
+
+		} while (!item.equals(Item.getDescription()));
+
+		for (Auction auction : auctions) {
+			System.out.print("Activate Auction? [Y/N] : ");
+			String choice = S.next().toUpperCase();
+			do {
+				if (choice.equals("Y")) {
+					auction.activate();
+					auctions.add(auction);
+					System.out.print("\n-- AUCTION ACTIVATED --\n");
+					return;
+				} else if (choice.equals("N")) {
+					auction.setStatus(Status.PENDING);
+					auctions.add(auction);
+					System.out.print("\n-- AUCTION NOT ACTIVATED --\n");
+					return;
+				}
+			} while (!choice.equals("Y") || choice.equals("N"));
+		}
+	}
+
 	public static void main(String[] args) {
-		new Sys();
+		// new Sys();
 	}
 
 	public void run() {
 		new Sys();
 
-	}
-
-	public void blockSeller() {
-		showUsers();
 	}
 
 	public void getBidOnAuctions() {

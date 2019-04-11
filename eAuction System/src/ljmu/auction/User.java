@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * <i> User class is abstract.
+ * <i> User class is abstract. </i>
  * @author Jordan Walker
  * @see <I>Seller</i>
  * @see <i>Buyer</i>

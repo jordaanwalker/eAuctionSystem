@@ -3,6 +3,12 @@ package ljmu.auction;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * <i> Seller class inherits username and password from abstract class User.</i>
+ * @author Jordan Walker
+ * @see <I>User</i>
+ */
+
 public final class Seller extends User implements Blockable {
 	private boolean blocked = true;
 	private List<Item> items = new LinkedList<Item>();

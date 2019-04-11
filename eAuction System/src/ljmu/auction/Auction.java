@@ -12,6 +12,7 @@ public final class Auction implements Blockable, Serializable{
 	private Item item;
 	private Seller seller;
 	
+	
 	public Auction(Double startPrice,Double reservePrice, LocalDateTime chooseStartDate, Status status, Item item, Seller seller) {
 		this.startPrice = startPrice;
 		this.reservePrice = reservePrice;
@@ -27,8 +28,9 @@ public final class Auction implements Blockable, Serializable{
 		
 	}
 	
-	public void verify() {
+	public Status verify() {
 		
+		return status = Status.PENDING;
 		
 	}
 	
