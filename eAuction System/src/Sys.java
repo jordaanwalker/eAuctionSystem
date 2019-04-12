@@ -11,6 +11,7 @@ import java.util.Scanner;
 
 import ljmu.auction.Admin;
 import ljmu.auction.Auction;
+import ljmu.auction.Bid;
 import ljmu.auction.Buyer;
 import ljmu.auction.Item;
 import ljmu.auction.Seller;
@@ -331,6 +332,8 @@ public class Sys {
 
 		System.out.println("Select Amount : ");
 		Double amount = Double.parseDouble(S.next());
+		
+		Bid bid = new Bid(amount, Buyer.class.cast(buyer), LocalDateTime.now());
 		
 		
 
