@@ -24,8 +24,8 @@ public final class Auction implements Blockable, Serializable{
 	}
 
 	
-	public void placeBid(double d, Buyer buyer, LocalDateTime localDateTime) {
-		
+	public void placeBid(double amount, Buyer buyer, LocalDateTime when) {
+		new Bid(amount, buyer, when);
 	}
 	
 	public Status verify() {

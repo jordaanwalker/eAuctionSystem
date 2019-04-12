@@ -12,6 +12,7 @@ import java.util.List;
 public final class Seller extends User implements Blockable {
 	private boolean blocked = true;
 	private List<Item> items = new LinkedList<Item>();
+	private	Status status;
 
 	public Seller(String username, String password) {
 		super(username, password);
@@ -40,6 +41,14 @@ public final class Seller extends User implements Blockable {
 				return items;
 			}
 		return null;
+	}
+	
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
 	}
 
 }

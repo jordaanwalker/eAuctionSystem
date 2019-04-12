@@ -39,7 +39,7 @@ public class Sys {
 			user.add(new Buyer("Glenn", "123"));
 			user.add(new Buyer("Matty", "123"));
 			user.add(new Admin("Liverpool", "123"));
-
+			
 			// same for more sellers/buyers
 			// Seller.class.cast(user.get(0)).getItems().add(new Item("Ball"));
 			// Seller.class.cast(user.get(0)).getItems().add(new Item("Shoe"));
@@ -48,8 +48,9 @@ public class Sys {
 			// Status.ACTIVE, new Item("Ball"),
 			// Seller.class.cast(user.get(0))));
 
-			auctions.add(new Auction(1.50, 2.50, LocalDateTime.now().plusSeconds(70), Status.PENDING, new Item("Ball"),
-					Seller.class.cast(user.get(1))));
+			// auctions.add(new Auction(1.50, 2.50, LocalDateTime.now().plusSeconds(70),
+			// Status.PENDING, new Item("Ball"),
+			// Seller.class.cast(user.get(1))));
 			/*
 			 * auctions.add(new Auction(1.50, 2.50, LocalDateTime.now().plusSeconds(70),
 			 * Status.ACTIVE, new Item("Shoe"), Seller.class.cast(user.get(0))));
@@ -288,6 +289,7 @@ public class Sys {
 			}
 			case "3":
 			case "V": {
+				showBlockedUsers();
 				break;
 			}
 			}
@@ -320,19 +322,18 @@ public class Sys {
 				System.out.println("\n" + auction.toString());
 			}
 		}
+		String chooseItem;
+		do {
+			System.out.println("Select Item : ");
+			chooseItem = S.next();
 
-		System.out.println("Select Item : ");
-		String chooseItem = S.next();
+		} while (chooseItem.equals(Item.getDescription()));
 
-		try {
-			for (Auction auction : auctions) {
-				if (chooseItem.equals(auction.getItem())) {
-				}
+		System.out.println("Select Amount : ");
+		Double amount = Double.parseDouble(S.next());
+		
+		
 
-			}
-		} catch (Exception e) {
-			System.out.print(e.getMessage());
-		}
 	}
 
 	public void setupAccount() {
@@ -394,7 +395,7 @@ public class Sys {
 
 					System.out.println("\n" + Seller.class.cast(seller).getItems());
 
-					System.out.println("-- CHOOSE FROM LIST ABOVE--");
+					System.out.println("-- CHOOSE FROM LIST ABOVE --");
 					System.out.print("Item : ");
 					chooseItem = S.next();
 				}
@@ -481,10 +482,22 @@ public class Sys {
 		System.out.print("Block? [Y/N] : ");
 		String choice = S.next();
 		if (choice.equals("Y")) {
-			seller.setBlocked();
+			
+			Seller.class.cast(seller).setStatus(Status.BLOCKED);
 			System.out.print("\n-- SELLER BLOCKED --\n");
+			return;
 		} else {
 			System.out.print("\n-- SELLER NOT BLOCKED --\n");
+		}
+	}
+	
+	
+	private void showBlockedUsers() {
+		
+		System.out.println("\n-- BLOCKED SELLERS --");
+		
+		if(Seller.class.cast(seller).getStatus().equals(Status.BLOCKED)) {
+			System.out.println(user.toString());
 		}
 	}
 
@@ -553,7 +566,7 @@ public class Sys {
 	}
 
 	public static void main(String[] args) {
-		// new Sys();
+		new Sys();
 	}
 
 	public void run() {
