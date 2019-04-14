@@ -18,7 +18,7 @@ import ljmu.auction.Seller;
 import ljmu.auction.Status;
 import ljmu.auction.User;
 
-//Filename cannot be System.
+//Filename cannot be System due to error.
 public class Sys {
 
 	private static final Scanner S = new Scanner(System.in);
