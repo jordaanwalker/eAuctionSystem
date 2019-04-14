@@ -43,7 +43,7 @@ public final class Auction implements Blockable, Serializable{
 			highest.getWho().victory(this);
 		}
 	}
-	// ToDo : Fix This
+	// ToDo : Fix This, returns null for now.
 	private Bid getHighestBid() {
 		
 		return null;
@@ -64,20 +64,12 @@ public final class Auction implements Blockable, Serializable{
 	@Override
 	public String toString() {
 		return String.format("Item : %s \nStart Price : £%.2f \nReserve Price : £%.2f \n"+"Close Date : " + closeDate
-				+ "\nSeller : " + seller + "\n", item, startPrice, reservePrice);
+				+ "\nSeller : " + Seller.class.cast(seller) + "\n", item, startPrice, reservePrice);
 	}
-//String.format("No:%02d  Type:%s  Price:%.2f  isBalcony:%s  isLounge:%s  isReserve:%s  %s",
 
 	public double getStartPrice() {
 		return startPrice;
 	}
-
-	/*@Override
-	public String toString() {
-		return "Auction [startPrice=" + startPrice + ", reservePrice=" + reservePrice + ", closeDate=" + closeDate
-				+ ", status=" + status + ", item=" + item + "]";
-	}*/
-
 
 	public void setStartPrice(double startPrice) {
 		this.startPrice = startPrice;

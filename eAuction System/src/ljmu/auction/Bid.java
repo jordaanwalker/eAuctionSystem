@@ -16,6 +16,11 @@ public class Bid implements Serializable{
 		this.when = when;
 	}
 
+	@Override
+	public String toString() {
+		return "Bid [amount=" + amount + ", who=" + who + ", when=" + when + "]";
+	}
+
 	public double getAmount() {
 		return amount;
 	}

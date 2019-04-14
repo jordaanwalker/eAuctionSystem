@@ -36,6 +36,12 @@ public final class Seller extends User implements Blockable {
 
 	}
 
+	/**
+	 * <i> Item can be returned from a lsit of items in which the seller has created.</i>
+	 * @author Jordan Walker
+	 * @see <I>Item</i>
+	 */
+	
 	public Item getItemByDescription(String description) {
 		for (Item items : items) {
 				return items;
